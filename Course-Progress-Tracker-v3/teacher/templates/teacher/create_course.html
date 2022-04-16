@@ -1,0 +1,179 @@
+<!-- @format -->
+{% extends "base.html" %}{% load static %} {% load template_filters %}
+<!-- prettier-ignore -->
+{% block head %} {% endblock %}
+{% block navcontent %}
+<a
+	class="anim nav-link active"
+	href="{% url 'teacher_home' %} "
+	style="color: #eeeeee"
+	>DEADLINES</a
+>
+<a
+	class="anim nav-link active"
+	href="{% url 'teacher_course' %}"
+	style="color: #eeeeee"
+	>COURSES</a
+>
+{% if is_committee %}
+<a
+	class="anim nav-link active"
+	href="{% url 'teacher_committee' %}"
+	style="color: #eeeeee"
+	>COMMITTEE</a
+>
+{% endif %} {% if is_head %}
+<a
+	class="anim nav-link active"
+	href="{% url 'teacher_head' %}"
+	style="color: #eeeeee"
+	>HEAD DASHBOARD</a
+>
+{% endif %}{% endblock %} {% block body %}
+
+<div class="container" style="padding-top: 20px; padding-bottom: 10px">
+	{% if failed %}
+	<div class="alert alert-danger" role="alert">
+		Course Adding Failed. Check if duplicate course exists!
+	</div>
+	{% endif %} {% if success %}
+	<div class="alert alert-success" role="alert">
+		Course Addition Successful.
+	</div>
+	{% endif %}
+	<div class="card" style="padding-left: 30px; padding-right: 30px">
+		<div class="card-body">
+			<h3 class="card-title" style="text-align: center">Create Course</h3>
+			<hr />
+			<form class="course_creation" method="POST">
+				{% csrf_token %}
+				<div class="form-row">
+					<div class="form-group col-md-8">
+						<label for="inputCourseName">Course Name</label>
+						<input
+							type="text"
+							class="form-control"
+							id="inputCourseName"
+							placeholder="Enter Valid Course Name"
+							name="inputCourseName"
+							required
+						/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="inputCourseType">Course Type</label>
+						<select
+							id="inputCourseType"
+							class="form-control"
+							name="inputCourseType"
+							required
+						>
+							<option selected disabled="disabled" value="">
+								Choose...
+							</option>
+							<option>Lab</option>
+							<option>Theory</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="inputCode">Course Code</label>
+						<input
+							type="text"
+							class="form-control"
+							id="inputCode"
+							placeholder="e.g: CSE250, CSE360"
+							name="inputCode"
+							required
+						/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="inputCredit">Course Credit</label>
+						<input
+							type="text"
+							class="form-control"
+							id="inputCredit"
+							name="inputCredit"
+							placeholder=""
+							required
+						/>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="inputYear">Year</label>
+						<input
+							type="text"
+							class="form-control"
+							id="inputYear"
+							name="inputYear"
+							required
+						/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputTeacher">Course Teacher</label>
+					<select
+						id="inputTeacher"
+						class="form-control"
+						name="inputTeacher"
+						required
+					>
+						<option selected disabled="disabled" value="">
+							Choose...
+						</option>
+						{% for teacher in teacher_list %}
+						<option>{{teacher}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="inputSecondSetter">Second Setter</label>
+					<select
+						id="inputSecondSetter"
+						class="form-control"
+						name="inputSecondSetter"
+						required
+					>
+						<option selected disabled="disabled" value="">
+							Choose...
+						</option>
+						{% for teacher in teacher_list %}
+						<option>{{teacher}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="inputCommittee">Select Committee Name</label>
+					<select
+						id="inputCommittee"
+						class="form-control"
+						name="inputCommittee"
+						required
+					>
+						<option selected disabled="disabled" value="">
+							Choose...
+						</option>
+						{% for committee in committees %}
+						<!-- prettier-ignore -->
+						{% if committee.year == current_year %}
+						<option>{{ committee.committee_id }}</option>
+						{% endif %} {% endfor %}
+					</select>
+				</div>
+				<br />
+				<div class="col text-center">
+					<button
+						type="submit"
+						class="btn btn-success"
+						style="text-align: center"
+						value="submit"
+						required
+					>
+						Create Course
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %} {% block scripts %} {% endblock %}
